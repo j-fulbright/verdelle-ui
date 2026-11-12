@@ -295,12 +295,18 @@ fn PresetBox(env: Env) -> impl IntoView {
     let outcome = RwSignal::new(None::<Result<PresetSummary, String>>);
     let input_id = env.id("code");
 
-    let apply = move || match read_preset_input(&code.get_untracked()) {
-        Ok(preset) => match env.apply_preset(&preset) {
-            Ok(()) => outcome.set(Some(Ok(summarize(&preset)))),
+    let has_code = Signal::derive(move || !code.get().trim().is_empty());
+    let apply = move || {
+        if code.get_untracked().trim().is_empty() {
+            return;
+        }
+        match read_preset_input(&code.get_untracked()) {
+            Ok(preset) => match env.apply_preset(&preset) {
+                Ok(()) => outcome.set(Some(Ok(summarize(&preset)))),
+                Err(e) => outcome.set(Some(Err(e))),
+            },
             Err(e) => outcome.set(Some(Err(e))),
-        },
-        Err(e) => outcome.set(Some(Err(e))),
+        }
     };
 
     view! {
@@ -322,7 +328,9 @@ fn PresetBox(env: Env) -> impl IntoView {
                             on_enter=move |_| apply()
                         />
                     </div>
-                    <Button on_click=move |_| apply()>"Apply"</Button>
+                    <Button disabled=Signal::derive(move || !has_code.get()) on_click=move |_| apply()>
+                        "Apply"
+                    </Button>
                 </div>
             </Field>
             <a
@@ -537,9 +545,12 @@ fn FineTuning(env: Env) -> impl IntoView {
                 />
             </div>
             <div class="vdl-theme-customizer__row">
-                <code class="vdl-theme-customizer__code" data-testid="draft-code">
-                    {move || draft.get().encode()}
-                </code>
+                // The code of the untouched default is noise; show it once something differs.
+                <Show when=move || draft.get() != Preset::default()>
+                    <code class="vdl-theme-customizer__code" data-testid="draft-code">
+                        {move || draft.get().encode()}
+                    </code>
+                </Show>
                 <Button
                     variant=ButtonVariant::Outline
                     size=Size::Small

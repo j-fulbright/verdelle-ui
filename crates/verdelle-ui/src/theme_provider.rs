@@ -9,6 +9,9 @@ use leptos::prelude::*;
 use std::collections::BTreeMap;
 use std::sync::Arc;
 
+/// What the unsaved theme being tried (a preset code or pasted CSS) is called in the lists.
+const PREVIEW_NAME: &str = "Custom";
+
 /// Light, dark, or whatever the operating system is set to.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
 pub enum ThemeMode {
@@ -145,7 +148,11 @@ impl ThemeContext {
                 .map(|t| entry(t, ThemeSource::Saved)),
         );
         if let Some(p) = self.preview.get() {
-            out.push(entry(&p, ThemeSource::Preview));
+            // Always listed as "Custom", also for a preview stored by an earlier version under
+            // the name "Preview".
+            let mut choice = entry(&p, ThemeSource::Preview);
+            choice.name = PREVIEW_NAME.to_string();
+            out.push(choice);
         }
         out
     }
@@ -181,7 +188,7 @@ impl ThemeContext {
     /// theme (named `preview`) and remembers it across reloads, without saving it under a
     /// name. On error nothing changes. See [`CustomTheme::build`] for how the two combine.
     pub fn try_theme(&self, code: Option<&str>, css: Option<&str>) -> Result<(), CustomThemeError> {
-        let built = CustomTheme::with_slug(PREVIEW_SLUG, "Preview", code, css)?;
+        let built = CustomTheme::with_slug(PREVIEW_SLUG, PREVIEW_NAME, code, css)?;
         self.set_preview(Some(built));
         self.theme.set(PREVIEW_SLUG.to_string());
         Ok(())

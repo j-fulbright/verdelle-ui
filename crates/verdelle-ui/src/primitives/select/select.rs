@@ -1,5 +1,5 @@
 use crate::primitives::core::compose_refs::use_composed_refs;
-use crate::primitives::core::dismissable_layer::use_dismissable_layer;
+use crate::primitives::core::dismissable_layer::use_dismissable_layer_with;
 use crate::primitives::core::focus_scope::use_focus_scope;
 use crate::primitives::core::id::use_id;
 use crate::primitives::core::popper::{
@@ -389,7 +389,11 @@ pub fn SelectContent(
     let presence = use_presence(present);
     keep_portal_mounted(presence.is_present);
     let focus_ref = use_focus_scope(Signal::derive(|| true), Signal::derive(|| true), None, None);
-    let dismiss_ref = use_dismissable_layer(
+    // Focus moving outside does not dismiss (as Radix's Select, which prevents it): pressing the
+    // list's scrollbar focuses the `role=listbox` element, which sits outside the layer's own
+    // element, and that used to close the list and made the scrollbar impossible to drag.
+    // Clicks elsewhere still close it (pointer down outside) and Tab is handled below.
+    let dismiss_ref = use_dismissable_layer_with(
         Some(Callback::new({
             let ctx = ctx.clone();
             move |_| ctx.close_and_refocus()
@@ -399,6 +403,7 @@ pub fn SelectContent(
         None,
         Some(Callback::new(move |()| ctx.open.set(false))),
         Signal::derive(move || !ctx.open.get()),
+        false,
     );
     let content_ref = AnyNodeRef::new();
     let refs = use_composed_refs(vec![
