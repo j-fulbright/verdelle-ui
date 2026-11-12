@@ -15,7 +15,7 @@ on headless primitives (`verdelle_ui::primitives`), themed with shadcn's tokens,
 
 ```toml
 [dependencies]
-verdelle-ui = "0.8.0-alpha.1"   # a pre-release; "0.8" will match once 0.8.0 is out
+verdelle-ui = "0.8"   # Leptos 0.8
 
 [features]
 hydrate = ["leptos/hydrate", "verdelle-ui/hydrate"]

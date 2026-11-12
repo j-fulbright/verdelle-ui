@@ -2,9 +2,8 @@
   <img src="docs/images/social-preview.png" alt="Verdelle: shadcn/ui for Leptos. About 340 accessible components in Rust, on headless primitives, themed with shadcn's tokens and preset codes." width="100%">
 </p>
 
-> **Status: early; a pre-release (`0.8.0-alpha.2`) is on crates.io.** Targets Leptos 0.8 only, supports shadcn's **nova** style only, and has been tested in Chromium
-> (desktop, light and dark), not yet on real devices. The API will change. Depend on the pre-release by its exact version
-> (see below). Verdelle is an unofficial port and is not affiliated with shadcn/ui, Base UI, Radix or Leptos.
+> **Status: early; `0.8.0` is on crates.io.** Targets Leptos 0.8 only, supports shadcn's **nova** style only, and has been tested in Chromium
+> (desktop, light and dark), not yet on real devices. The API may still change between releases (see below). Verdelle is an unofficial port and is not affiliated with shadcn/ui, Base UI, Radix or Leptos.
 
 ## What it is
 
@@ -42,7 +41,7 @@ cargo leptos new --git https://github.com/leptos-rs/start-axum
 
 ```toml
 [dependencies]
-verdelle-ui = "0.8.0-alpha.2"   # a pre-release; "0.8" will match once 0.8.0 is out. Unreleased: { git = "https://github.com/j-fulbright/verdelle-ui", rev = "<commit>" }
+verdelle-ui = "0.8"   # Leptos 0.8. Unreleased: { git = "https://github.com/j-fulbright/verdelle-ui", rev = "<commit>" }
 
 [features]
 hydrate = ["leptos/hydrate", "verdelle-ui/hydrate", "dep:console_error_panic_hook", "dep:wasm-bindgen"]
@@ -252,13 +251,13 @@ What is true today, no more:
 - Stable Rust 1.88 or newer; no nightly features. wasm32 (hydrate) and native (ssr) both build.
 - Tailwind is optional (v4 syntax shown above). Without it, use the embedded CSS.
 - Only the nova style and Lucide icons; no RTL.
-- Releases will be git tags (`v0.8.0`); consume by tag, not branch, once they exist.
+- Releases are git tags (`v0.8.0`) and crates.io versions; consume a release, not a branch.
 
 ## Status and roadmap
 
 Every shadcn base component except Direction and the chat set is built and browser-checked in the gallery; per-component
 API differences from shadcn are listed in [docs/api-coverage.md](docs/api-coverage.md). Next: moving a first real application onto Verdelle, a documentation page per component,
-the 0.8.0 release, and later the chat and AI components, a preset-builder example, and other styles or icon
+and later the chat and AI components, a preset-builder example, and other styles or icon
 sets only if there is demand.
 
 **Known limitations** (the short list; the full API comparison is in [docs/api-coverage.md](docs/api-coverage.md)): no real-device or screen-reader testing; nova and
