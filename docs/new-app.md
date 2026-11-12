@@ -223,7 +223,7 @@ App installation token, or a deploy key with `ssh://` URLs and `ssh-agent`). Car
 credential helper, so for a private fork set `CARGO_NET_GIT_FETCH_WITH_CLI=true`. Pin by `tag` (or `rev`);
 `Cargo.lock` holds the exact commit either way, and CI should build with `--locked`.
 
-**Verdelle from crates.io:** nothing special; `Cargo.lock` pins the version (`verdelle-ui = "0.8.0-alpha.1"` while it is a pre-release).
+**Verdelle from crates.io:** nothing special; `Cargo.lock` pins the version (`verdelle-ui = "0.8.0-alpha.2"` while it is a pre-release).
 
 **Caching.** Cache `~/.cargo/registry`, `~/.cargo/git`, `target/` and cargo-leptos's own cache (`~/.cache/cargo-leptos` on
 Linux: the Tailwind binary, wasm-opt) keyed on `Cargo.lock`; for example `Swatinem/rust-cache` plus a cache step for the

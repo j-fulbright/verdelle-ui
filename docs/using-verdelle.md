@@ -12,7 +12,7 @@ same line keeps working and picks it up on `cargo update`:
 ```toml
 # app Cargo.toml
 [dependencies]
-verdelle-ui = "0.8.0-alpha.1"       # a plain "0.8" does not match pre-releases
+verdelle-ui = "0.8.0-alpha.2"       # a plain "0.8" does not match pre-releases
 ```
 
 Verdelle's minor version matches Leptos's: `0.8.x` is for Leptos 0.8. Pre-release versions (`0.8.0-alpha.N`) may change the API

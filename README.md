@@ -2,7 +2,7 @@
   <img src="docs/images/social-preview.png" alt="Verdelle: shadcn/ui for Leptos. About 340 accessible components in Rust, on headless primitives, themed with shadcn's tokens and preset codes." width="100%">
 </p>
 
-> **Status: early; a pre-release (`0.8.0-alpha.1`) is on crates.io.** Targets Leptos 0.8 only, supports shadcn's **nova** style only, and has been tested in Chromium
+> **Status: early; a pre-release (`0.8.0-alpha.2`) is on crates.io.** Targets Leptos 0.8 only, supports shadcn's **nova** style only, and has been tested in Chromium
 > (desktop, light and dark), not yet on real devices. The API will change. Depend on the pre-release by its exact version
 > (see below). Verdelle is an unofficial port and is not affiliated with shadcn/ui, Base UI, Radix or Leptos.
 
@@ -42,7 +42,7 @@ cargo leptos new --git https://github.com/leptos-rs/start-axum
 
 ```toml
 [dependencies]
-verdelle-ui = "0.8.0-alpha.1"   # a pre-release; "0.8" will match once 0.8.0 is out. Unreleased: { git = "https://github.com/j-fulbright/verdelle-ui", rev = "<commit>" }
+verdelle-ui = "0.8.0-alpha.2"   # a pre-release; "0.8" will match once 0.8.0 is out. Unreleased: { git = "https://github.com/j-fulbright/verdelle-ui", rev = "<commit>" }
 
 [features]
 hydrate = ["leptos/hydrate", "verdelle-ui/hydrate", "dep:console_error_panic_hook", "dep:wasm-bindgen"]
