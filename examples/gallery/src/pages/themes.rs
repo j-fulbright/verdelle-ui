@@ -209,7 +209,7 @@ pub fn ThemesPage() -> impl IntoView {
             <CustomizerSections />
             <Section
                 title="ThemeSwitcher with the provider"
-                description="No props: it lists the built-in themes, those declared with ThemeStyle (Ocean, below), the preset prop, the themes you save on this page and the unsaved preview, and it changes the page's theme. Same control as the sidebar's. Each swatch shows its own theme's background, primary, accent and first chart colour: apply a preset code in the customizer above, open this list, and the Preview entry (and a saved one) show that preset's colours, in light and dark."
+                description="No props: it lists the built-in themes, those declared with ThemeStyle (Ocean, below), the preset prop, the themes you save on this page and the unsaved preview, and it changes the page's theme. Same control as the sidebar's. Each swatch shows its own theme's background, primary, accent and first chart colour: apply a preset code in the customizer above, open this list, and the Custom entry (and a saved one) show that preset's colours, in light and dark."
             >
                 <Row label="Provider">
                     <ThemeSwitcher id="themes-provider-switcher" />
