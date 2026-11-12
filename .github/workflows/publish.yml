@@ -26,6 +26,9 @@ jobs:
     name: Publish to crates.io
     needs: ci
     runs-on: ubuntu-latest
+    # The `crates-io` environment (Settings > Environments) holds the approval step: this job waits for the
+    # maintainer to approve it, for dry runs as well. It only accepts `v*` tags and `main`.
+    environment: crates-io
     permissions:
       contents: write
       id-token: write # crates.io Trusted Publishing (OIDC)

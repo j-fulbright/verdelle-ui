@@ -10,7 +10,7 @@ overview. Also `docs/reporting-issues.md` (how an app's agents file Verdelle iss
 Planning notes (status, decisions, what is next) are kept locally in `docs/internal/`, which is gitignored and not part of the repository. If you have them, keep them current as things land; if not, `docs/api-coverage.md` and the open GitHub issues are the status.
 
 ## Layout
-- `crates/verdelle-ui`: the one crate (published to crates.io; releases go through `.github/workflows/publish.yml` with Trusted Publishing). Styled components (`src/*.rs`) and the CSS (`css/components.css`, generated
+- `crates/verdelle-ui`: the one crate (published to crates.io; releases go through `.github/workflows/publish.yml` with Trusted Publishing: only an admin can create a `v*` tag, and the job waits for approval in the `crates-io` environment). Styled components (`src/*.rs`) and the CSS (`css/components.css`, generated
   `css/tokens.css`, `css/kit.css` entry point, optional `css/tailwind.css`). It contains the headless behaviour as the public
   module `verdelle_ui::primitives` (`src/primitives/`: roles, keyboard, focus, ids, positioning; `core/` holds shared helpers, each
   primitive is one module next to it). Ported from Leptix (MIT); see `NOTICE` and `LICENSES/LEPTIX-MIT.txt`.
