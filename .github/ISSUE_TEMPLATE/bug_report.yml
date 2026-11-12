@@ -1,0 +1,40 @@
+name: Bug report
+description: Something in Verdelle behaves wrongly or differently from shadcn/ui
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository is public. Do not paste private code, internal URLs, host or customer names, tokens, or screenshots of real data. Use example names (Alpha, Beta, QA, Admin; example.com).
+  - type: input
+    id: version
+    attributes:
+      label: Verdelle version
+      description: The git commit or tag from your Cargo.lock (or "main").
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected (link shadcn's behaviour if it differs), and what you saw.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: A short generic snippet, or the gallery page and steps that show it.
+  - type: input
+    id: env
+    attributes:
+      label: Browser and OS
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Checks
+      options:
+        - label: I removed private details from this report.
+          required: true
+        - label: I searched existing issues first.
+          required: true

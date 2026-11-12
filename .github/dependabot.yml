@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      # Leptos and its companion crates are versioned together; a lone bump rarely compiles.
+      leptos:
+        patterns:
+          - "leptos*"
+          - "reactive_graph"
+          - "tachys"
+          - "floating-ui-*"
+      # wasm-bindgen must match the wasm-bindgen CLI that builds the gallery (see CLAUDE.md), so these
+      # are bumped together and deliberately.
+      wasm:
+        patterns:
+          - "wasm-bindgen*"
+          - "web-sys"
+          - "js-sys"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"

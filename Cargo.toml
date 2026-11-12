@@ -1,0 +1,11 @@
+[workspace]
+members = ["crates/*", "examples/gallery"]
+resolver = "3"
+
+# Keep target/ small. Leptos's view! macro makes huge types, and full debug info made the gallery's
+# object files over 1 GB each (target/ reached 64 GB). Line tables keep readable backtraces.
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false

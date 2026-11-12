@@ -1,0 +1,46 @@
+[package]
+name = "verdelle-gallery"
+version = "0.0.0"
+edition = "2024"
+description = "A storybook-style app that renders every Verdelle component. Needs no database or cloud setup."
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+verdelle-ui = { path = "../../crates/verdelle-ui" }
+leptos = "0.8"
+leptos_meta = "0.8"
+leptos_router = "0.8"
+leptos_axum = { version = "0.8", optional = true }
+axum = { version = "0.8", optional = true }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"], optional = true }
+console_error_panic_hook = { version = "0.1", optional = true }
+wasm-bindgen = { version = "0.2", optional = true }
+
+[features]
+hydrate = ["leptos/hydrate", "verdelle-ui/hydrate", "dep:console_error_panic_hook", "dep:wasm-bindgen"]
+ssr = [
+    "dep:axum",
+    "dep:tokio",
+    "dep:leptos_axum",
+    "leptos/ssr",
+    "verdelle-ui/ssr",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+]
+
+# `cargo leptos watch` in this folder serves the gallery on http://127.0.0.1:3100.
+[package.metadata.leptos]
+output-name = "verdelle-gallery"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+tailwind-input-file = "style/tailwind.css"
+site-addr = "127.0.0.1:3100"
+reload-port = 3101
+bin-features = ["ssr"]
+bin-default-features = false
+lib-features = ["hydrate"]
+lib-default-features = false

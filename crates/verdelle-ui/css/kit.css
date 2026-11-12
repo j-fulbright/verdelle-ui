@@ -1,0 +1,8 @@
+/* Entry point: import this one file.
+ *
+ * The component styles go into Tailwind's `components` layer so that Tailwind
+ * utility classes (`w-full`, `flex-1`, ...) given through a component's `class`
+ * prop override them, as they do in shadcn/ui. Unlayered rules would always win
+ * over utilities. In a project without Tailwind the layer is harmless. */
+@import "./tokens.css";
+@import "./components.css" layer(components);

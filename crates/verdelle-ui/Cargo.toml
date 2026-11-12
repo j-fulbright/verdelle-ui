@@ -1,0 +1,113 @@
+[package]
+name = "verdelle-ui"
+version = "0.8.0-alpha.1"
+edition = "2024"
+rust-version = "1.88"
+description = "shadcn/ui components for Leptos 0.8 on headless, accessible primitives, driven by shadcn-format CSS themes."
+# The code is MIT; the Indicator derives from gpui-component (Apache-2.0) and the icon set is Lucide (ISC).
+# See NOTICE and LICENSES/.
+license = "MIT AND Apache-2.0 AND ISC"
+readme = "README.md"
+# Lets a dependent app's build script find css/ (DEP_VERDELLE_UI_CSS_DIR); see build.rs. Apps normally use `kit_css()`.
+links = "verdelle-ui"
+build = "build.rs"
+keywords = ["leptos", "shadcn", "ui", "components", "tailwind"]
+categories = ["gui", "web-programming", "wasm"]
+repository = "https://github.com/j-fulbright/verdelle-ui"
+# What ships: the code, the CSS and themes it embeds with include_str!, the themegen example, the fixtures
+# the unit tests read, and the licence files. Not shipped: the Node oracle that regenerated the fixtures.
+include = [
+    "/build.rs",
+    "/src/**",
+    "/css/**",
+    "/themes/**",
+    "/examples/**",
+    "/tests/css_structure.rs",
+    "/tests/fixtures/*.json",
+    "/NOTICE",
+    "/LICENSE",
+    "/LICENSES/**",
+    "/NAMING.md",
+    "/README.md",
+]
+
+[package.metadata.docs.rs]
+features = ["ssr"]
+
+[dependencies]
+# No "nightly" feature: this crate must build on stable, so use .get()/.set() rather than call syntax.
+leptos = { version = "0.8.12" }
+leptos_dom = "0.8"
+leptos-maybe-callback = "0.2"
+leptos-node-ref = "0.2"
+leptos-typed-fallback-show = "0.2"
+floating-ui-leptos = "0.6"
+send_wrapper = "0.6"
+serde = "1"
+serde_json = "1"
+# `localStorage` for the theme provider (browser only; used behind the `hydrate` feature).
+leptos-use-storage = "0.20"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# `Date.now()` and the browser's local date for `CalendarDate::today`.
+js-sys = "0.3"
+
+[dependencies.web-sys]
+version = "0.3"
+# What the headless primitives and the styled components touch; Leptos does not enable these itself.
+features = [
+    "AnimationEvent",
+    "ClipboardEvent",
+    "CssStyleDeclaration",
+    "CssStyleSheet",
+    "DataTransfer",
+    "Document",
+    "DomRect",
+    "Element",
+    "Event",
+    "EventInit",
+    "EventListenerOptions",
+    "EventTarget",
+    "FocusEvent",
+    "FocusOptions",
+    "HtmlDocument",
+    "HtmlElement",
+    "HtmlImageElement",
+    "HtmlInputElement",
+    "KeyboardEvent",
+    "Location",
+    "MediaQueryList",
+    "MouseEvent",
+    "MutationObserver",
+    "MutationObserverInit",
+    "Node",
+    "NodeList",
+    "Performance",
+    "PointerEvent",
+    "ResizeObserver",
+    "ResizeObserverBoxOptions",
+    "ResizeObserverEntry",
+    "ResizeObserverOptions",
+    "ResizeObserverSize",
+    "ScrollBehavior",
+    "ScrollIntoViewOptions",
+    "ScrollToOptions",
+    "Storage",
+    "SubmitEvent",
+    "Touch",
+    "TouchEvent",
+    "TouchList",
+    "ValidityState",
+    "Window",
+]
+
+[features]
+default = []
+ssr = ["leptos/ssr", "leptos-use-storage/ssr"]
+hydrate = ["leptos/hydrate"]
+
+[dev-dependencies]
+# Tests render components to HTML strings, which needs the server renderer.
+leptos = { version = "0.8.12", features = ["ssr"] }
+# The themegen example.
+anyhow = "1"

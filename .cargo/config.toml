@@ -1,0 +1,6 @@
+# Leptos's `erase_components` cfg type-erases view types in debug builds. `cargo leptos` sets it for its own
+# dev builds; without it every other cargo command (test, clippy, check) compiles the gallery with full
+# Leptos types, and its objects were 70x bigger: one `cargo test` wrote 30 GB into target/. Setting it here
+# makes every command match. Release builds in consumer apps are unaffected (they have their own config).
+[build]
+rustflags = ["--cfg", "erase_components"]

@@ -1,0 +1,26 @@
+/* The gallery uses Tailwind for its own layout, which also exercises the way a Tailwind app
+   consumes Verdelle: the kit CSS goes in the components layer and tailwind.css maps the theme
+   colours to utilities (bg-background, text-muted-foreground, ...). */
+@import "tailwindcss";
+@import "../../../crates/verdelle-ui/css/kit.css";
+@import "../../../crates/verdelle-ui/css/tailwind.css";
+
+@source "../src/**/*.rs";
+
+@variant dark (&:where(.dark, .dark *));
+
+/* Tailwind v4's `border` utility defaults to currentColor; shadcn's globals.css points it at the theme's
+   border token in the base layer, and so does the gallery. A Tailwind app using Verdelle needs the same rule. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  margin: 0;
+}

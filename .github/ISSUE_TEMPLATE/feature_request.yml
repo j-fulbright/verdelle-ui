@@ -1,0 +1,29 @@
+name: Missing feature or API difference
+description: A component, prop or behaviour Verdelle lacks (compared with shadcn/ui)
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository is public. Do not paste private code, internal URLs, host or customer names, tokens, or screenshots of real data. Use example names (Alpha, Beta, QA, Admin; example.com).
+  - type: textarea
+    id: need
+    attributes:
+      label: What is missing
+      description: The component and the prop or behaviour, and what you did meanwhile. Link shadcn's source or docs if it has the thing.
+    validations:
+      required: true
+  - type: textarea
+    id: use
+    attributes:
+      label: Where it is needed
+      description: The generic use case (for example "a stat tile that can be toggled as a filter").
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Checks
+      options:
+        - label: I removed private details from this report.
+          required: true
+        - label: I searched existing issues first.
+          required: true

@@ -1,0 +1,104 @@
+name: Publish
+
+# Publishes `verdelle-ui` to crates.io when a version tag is pushed, as the sideways-otel crate does.
+# Run it by hand (Actions > Publish > Run workflow) with `dry_run` on to test the whole pipeline
+# without publishing anything.
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run every check and `cargo package`, but do not publish or create a release'
+        type: boolean
+        default: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    name: Publish to crates.io
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write # crates.io Trusted Publishing (OIDC)
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify the commit is on main
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::$GITHUB_REF_NAME (commit $GITHUB_SHA) is not on main"
+            exit 1
+          fi
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Verify the tag matches the crate version
+        if: github.ref_type == 'tag'
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          crate_version="$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "verdelle-ui") | .version')"
+          if [ "$tag_version" != "$crate_version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME (version $tag_version) does not match verdelle-ui $crate_version in Cargo.toml"
+            exit 1
+          fi
+
+      # If this version is already on crates.io (published by hand), skip publishing and only create the release.
+      - name: Is this version already on crates.io?
+        id: exists
+        run: |
+          version="$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "verdelle-ui") | .version')"
+          status="$(curl -s -o /dev/null -w '%{http_code}' -A 'verdelle-ui-publish-workflow' "https://crates.io/api/v1/crates/verdelle-ui/$version")"
+          if [ "$status" = "200" ]; then
+            echo "verdelle-ui $version is already on crates.io; skipping the publish step"
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check the crate is publishable
+        if: ${{ steps.exists.outputs.published != 'true' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        run: |
+          if grep -q '^publish *= *false' crates/verdelle-ui/Cargo.toml; then
+            echo "::error::crates/verdelle-ui/Cargo.toml still has publish = false; remove it when you are ready to publish"
+            exit 1
+          fi
+
+      - name: Package (dry run)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: cargo package -p verdelle-ui --locked
+
+      # crates.io Trusted Publishing: the crate's settings on crates.io name this repository and workflow, and
+      # the action exchanges the workflow's OIDC identity for a short-lived token. No secret is stored.
+      - name: Authenticate with crates.io (Trusted Publishing)
+        id: auth
+        if: ${{ steps.exists.outputs.published != 'true' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        uses: rust-lang/crates-io-auth-action@v1
+
+      - name: Publish to crates.io
+        if: ${{ steps.exists.outputs.published != 'true' && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+        run: cargo publish -p verdelle-ui --locked
+
+      - name: Create GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # A version with a hyphen (0.8.0-alpha.1) is a pre-release.
+          flag=""
+          case "$GITHUB_REF_NAME" in *-*) flag="--prerelease" ;; esac
+          gh release create "$GITHUB_REF_NAME" --generate-notes --title "$GITHUB_REF_NAME" $flag
