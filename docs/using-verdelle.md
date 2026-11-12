@@ -6,17 +6,16 @@ also [new-app.md](new-app.md) for a complete working layout.
 
 ## Depending on it
 
-**From crates.io (the normal way).** While Verdelle is a pre-release, name the version exactly; once `0.8.0` is released the
-same line keeps working and picks it up on `cargo update`:
+**From crates.io (the normal way).** `"0.8"` takes the newest `0.8.x` on `cargo update`:
 
 ```toml
 # app Cargo.toml
 [dependencies]
-verdelle-ui = "0.8.0-alpha.2"       # a plain "0.8" does not match pre-releases
+verdelle-ui = "0.8"
 ```
 
-Verdelle's minor version matches Leptos's: `0.8.x` is for Leptos 0.8. Pre-release versions (`0.8.0-alpha.N`) may change the API
-between releases.
+Verdelle's minor version matches Leptos's: `0.8.x` is for Leptos 0.8. The `0.8.0-alpha.N` pre-releases came before `0.8.0`; a plain
+`"0.8"` does not match pre-releases, so an app still on one names it exactly until it moves to `0.8.0`.
 
 **Developing against a checkout: a `[patch]`.** For an app that uses the published crate but is being developed against a local
 Verdelle, keep this out of the committed files (an uncommitted `.cargo/config.toml` is enough):
@@ -144,7 +143,7 @@ gpui-component (Apache-2.0) and the icon set is Lucide (ISC); Leptix and shadcn/
 
 - Verdelle's minor equals Leptos's: `0.8.x` targets Leptos 0.8, `0.9.x` will target Leptos 0.9. The patch is Verdelle's own.
   A component library cannot span two Leptos versions because Leptos types are in its public API.
-- The crate stays at `0.8.0` until the first publish; after that, patch releases (`0.8.1`, ...) are Verdelle's own and
+- `0.8.0` is the first release (after `0.8.0-alpha.1` and `-alpha.2`); patch releases (`0.8.1`, ...) are Verdelle's own and
   the minor stays pinned to Leptos's. Say in the release notes when a patch changes an API.
 - Releases are git tags (`v0.8.0`). When 0.9 work starts, `main` tracks 0.9 and a `leptos-0.8` branch takes fixes.
 - Keep dependencies current; `wasm-bindgen-cli` must match the locked `wasm-bindgen`.

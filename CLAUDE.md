@@ -4,7 +4,7 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 
 ## What this is
 Verdelle: shadcn/ui components for Leptos, on Base UI-style headless primitives. Early and in active development; the repository is public
-on GitHub, and a pre-release of the crate is on crates.io. The first consumer is a separate private app that depends on it from crates.io. See `README.md` for the
+on GitHub, and the crate is on crates.io (0.8.0). The first consumer is a separate private app that depends on it from crates.io. See `README.md` for the
 overview. Also `docs/reporting-issues.md` (how an app's agents file Verdelle issues without leaking private details; issue templates are in `.github/ISSUE_TEMPLATE/`), `docs/api-coverage.md` (each shadcn component's API against Verdelle's; update the row when a component's props change), `docs/new-app.md`, `docs/presets-and-themes.md` and `docs/using-verdelle.md` (depending on Verdelle, CSS import, features, version policy). CI (`.github/workflows/ci.yml`) mirrors `scripts/check.sh`; keep them in step when you add a check. `build.rs` in verdelle-ui only reports the `css/` folder to dependents (`links`); public items should have doc comments (`cargo doc -p verdelle-ui --no-deps` must stay warning-free).
 
 Planning notes (status, decisions, what is next) are kept locally in `docs/internal/`, which is gitignored and not part of the repository. If you have them, keep them current as things land; if not, `docs/api-coverage.md` and the open GitHub issues are the status.
